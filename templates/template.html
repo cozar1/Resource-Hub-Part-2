@@ -2,38 +2,41 @@
     <head>
         <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/static/style.css">
+        <link rel="icon" href="../static/images/error.jpg">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Font Awesome CDN -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    
-        <title>Document</title>
+        <title>Resource Hub</title>
     </head>
-<body>
-    <div class="header">
 
-        <div class="title-container">
-            <h1>RESOURCE.HUB</h1>
-            <a class="upload" href="/upload" ><i class="fa-solid fa-upload"></i> Upload</a>
-        </div>
-        <br>
-    
-        {% if show_navbar %}
-        <div class="navbar">
-            <div id="tag-buttons">
-                {% for tag in tags %}
-                <button class="tag-button" data-tag="{{ tag[0] }}"><i class="{{tag[1]}}" ></i> {{ tag[0] }}</button>
-                {% endfor %}
+    <body>
+        <div class="header">
+
+            <div class="title-container">
+                <h1>RESOURCE.HUB</h1>
+                <a class="button" href="/upload" ><i class="fa-solid fa-upload"></i> Upload</a>
             </div>
-            <input class="search" type="text" name="name">
+            <br>
+        
+            {% if show_navbar %}
+            <div class="navbar">
+                <div id="tag-buttons">
+                    {% for tag in tags %}
+                    <button class="tag-button" data-tag="{{ tag[0] }}"><i class="{{tag[1]}}" ></i> {{ tag[0] }}</button>
+                    {% endfor %}
+                </div>
+                <input class="search" type="text" name="name">
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
-    </div>
 
-    {% block content %}
-    {% endblock %}
+        {% block content %}
+        {% endblock %}
 
-</body>
+    </body>
+
+</html>
 
 <script>
     const buttons = document.querySelectorAll('.tag-button');
