@@ -1,50 +1,53 @@
 {% extends "template.html" %}
 {% block content %}
 <form action="/upload" method="post" enctype="multipart/form-data">
-    <div class="upload-grid">
-        <div class="upload-grid-item">
-            <div class="input-name">
+    <div class="grid-3">
+        <div class="vertical_align">
+            <div>
                 <h1>Name</h1>
-                <input class="button" type="text" name="name">
+                <input class="input" type="text" name="name">
             </div>
-            <div class="input-name">
+
+            <div>
                 <h1>Description</h1>
-                <input class="button" type="text" name="description">
+                <input class="input" type="text" name="description">
             </div>
+
             <h1>Tag(s)</h1>
-            <div class="button">
+            <div class="grid-3">
                 {% for tag in tags %}
                 <div>
-                    <input class="button" type="checkbox" name="tags" value="{{ tag[0] }}">
+                    <input class="selectable_button" type="checkbox" name="tags" value="{{ tag[0] }}">
                     <h2>{{ tag[1] }}</h2>
                 </div>
                 {% endfor %}
             </div>
             
         </div>
-        <div class="upload-grid-item">
+
+        <div class="vertical_align">
             <h1>Preview</h1>
-            <img id="preview-img" class="image-preview" src="../static/images/error.jpg">
+            <img id="preview-img" class="image" src="../static/images/error.jpg">
             <button type="submit" class="button">Upload!</button>
         </div>
-        <div class="upload-grid-item">
+        <div class="vertical_align">
             <h1>Diffuse Map</h1>
-            <label class="custom-file-upload">
+            <label class="upload-file">
                 <input class="button" type="file" name="diffuse" accept=".png, .jpg" onchange="updateFileName(this, 'diffuse-file-name','preview-img')">
                 <span id="diffuse-file-name">No file chosen</span>
             </label>
             <h1>Normal Map</h1>
-            <label class="custom-file-upload">
+            <label class="upload-file">
                 <input class="button" type="file" name="normal" accept=".png, .jpg" onchange="updateFileName(this, 'normal-file-name')">
                 <span id="normal-file-name">No file chosen</span>
             </label>
             <h1>Specular Map</h1>
-            <label class="custom-file-upload">
+            <label class="upload-file">
                 <input class="button" type="file" name="specular" accept=".png, .jpg" onchange="updateFileName(this, 'specular-file-name')">
                 <span id="specular-file-name">No file chosen</span>
             </label>
             <h1>Occlusion Map</h1>
-            <label class="custom-file-upload">
+            <label class="upload-file">
                 <input class="button" type="file" name="occlusion" accept=".png, .jpg" onchange="updateFileName(this, 'occlusion-file-name')">
                 <span id="occlusion-file-name">No file chosen</span>
             </label>

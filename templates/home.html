@@ -6,17 +6,15 @@
             <div class="asset" data-tags="{{ asset[2] | map(attribute=0) | join(',') }}">
                 <img class="image" src="/static/images/{{asset[0]}}d.png">
                 <div class="img-types">
-                    <div class="img-type">D</div>
-                    <div class="img-type">N</div>
-                    <div class="img-type">S</div>
-                    <div class="img-type">O</div>
+                    <div class="button">D</div>
+                    <div class="button">N</div>
+                    <div class="button">S</div>
+                    <div class="button">O</div>
                 </div>
                 <p>{{ asset[1] }}</p>
-                <div class="asset-tags">
                     {% for i in asset[2] %} 
-                    <span class="tag"><i class="{{i[1]}}"></i> {{ i[0] }}</span>
+                    <span class="button"><i class="{{i[1]}}"></i> {{ i[0] }}</span>
                     {% endfor %}
-                </div> 
             </div>
         </a>
         {% endfor %}

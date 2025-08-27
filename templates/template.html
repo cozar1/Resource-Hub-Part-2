@@ -14,7 +14,7 @@
         <div class="header">
 
             <div class="title-container">
-                <h1>RESOURCE.HUB</h1>
+                <a class="header-link" href="/">RESOURCE.HUB</a>
                 <a class="button" href="/upload" ><i class="fa-solid fa-upload"></i> Upload</a>
             </div>
             <br>
@@ -23,7 +23,7 @@
             <div class="navbar">
                 <div id="tag-buttons">
                     {% for tag in tags %}
-                    <button class="tag-button" data-tag="{{ tag[0] }}"><i class="{{tag[1]}}" ></i> {{ tag[0] }}</button>
+                    <button class="button" data-tag="{{ tag[0] }}"><i class="{{tag[1]}}" ></i> {{ tag[0] }}</button>
                     {% endfor %}
                 </div>
                 <input class="search" type="text" name="name">
