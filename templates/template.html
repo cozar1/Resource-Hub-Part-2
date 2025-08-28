@@ -23,7 +23,7 @@
             <div class="navbar">
                 <div id="tag-buttons">
                     {% for tag in tags %}
-                    <button class="button" data-tag="{{ tag[0] }}"><i class="{{tag[1]}}" ></i> {{ tag[0] }}</button>
+                    <button class="tag-button" data-tag="{{ tag[0] }}"><i class="{{tag[1]}}" ></i> {{ tag[0] }}</button>
                     {% endfor %}
                 </div>
                 <input class="search" type="text" name="name">
