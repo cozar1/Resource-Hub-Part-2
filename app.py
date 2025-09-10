@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, abort
 import sqlite3
 import os
 from werkzeug.utils import secure_filename
@@ -26,8 +26,8 @@ def allowed_file(filename):
         and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
     )
 
-# home page
-@app.route('/')
+
+@app.route('/')  # home page
 def home():
     tags = query("SELECT name, icon FROM Tag")
     assets_data = query("SELECT id, name FROM asset")
@@ -43,18 +43,22 @@ def home():
     # asigns the assets tags to each asset
     for asset in processed_assets:
         associated_tags = query(
-            "SELECT name, icon FROM Tag WHERE ID IN (SELECT Tag_ID FROM assetTags WHERE Model_ID = ?)",
+            "SELECT name, icon FROM Tag WHERE ID IN \
+            (SELECT Tag_ID FROM assetTags WHERE Model_ID = ?)",
             (asset[0],)
         )
         asset.append(associated_tags)
 
-    return render_template('home.html', tags=tags, assets=processed_assets, show_navbar=True)
+    return render_template('home.html',
+                           tags=tags,
+                           assets=processed_assets,
+                           show_navbar=True)
 
 
 # error function that can be used to display a wide variety of errors
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html', error=404), 404
+    return render_template('404.html', error=e), 404
 
 
 # upload page where the user uploads new assets
@@ -80,7 +84,8 @@ def upload():
 
     # checks if there is at least a diffuse texture
     if not files["d"] or files["d"].filename == "":
-        return render_template("404.html", error="401 No Image Selected")
+        #return render_template("404.html", error="401 No Image Selected")
+        abort(404)
 
     # checks if the files are allowed
     for suffix, file in files.items():
@@ -109,6 +114,12 @@ def upload():
 def asset(id):
     asset = query("SELECT id,name,description FROM asset WHERE ID = ?", (id,))
     assettags = query("SELECT name,icon FROM Tag WHERE ID IN (SELECT Tag_ID FROM assetTags WHERE Model_ID = ?)", (id,))
+
+    if not asset:
+        abort(404)
+
+    if not assettags:
+        abort(404)
 
     return render_template('asset.html', show_navbar=False, asset=asset, assettags=assettags)
 
