@@ -16,9 +16,7 @@
             <div class="title-container">
                 <a class="header-link" href="/">RESOURCE.HUB</a>
                 <a class="button" href="/upload" ><i class="fa-solid fa-upload"></i> Upload</a>
-            </div>
-            <br>
-        
+            </div>      
             {% if show_navbar %}
             <div class="navbar">
                 <div id="tag-buttons">
@@ -26,7 +24,7 @@
                     <button class="button" data-tag="{{ tag[0] }}"><i class="{{tag[1]}}" ></i> {{ tag[0] }}</button>
                     {% endfor %}
                 </div>
-                <input class="search" type="text" name="name">
+                <input class="search" type="text" name="name" placeholder="Search...">
             </div>
             {% endif %}
         </div>
@@ -39,7 +37,7 @@
 </html>
 
 <script>
-    const buttons = document.querySelectorAll('.tag-button');
+    const buttons = document.querySelectorAll('#tag-buttons .button');
     const assets = document.querySelectorAll('.asset');
     const activeTags = new Set();
     const searchInput = document.querySelector('.search');
@@ -79,4 +77,30 @@
             asset.style.display = shouldShow ? '' : 'none';
         });
     }
+
+    // Handle image type button hover effects
+    document.addEventListener('DOMContentLoaded', function() {
+        const imgTypeButtons = document.querySelectorAll('.img-type-btn');
+        
+        imgTypeButtons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                const assetId = this.getAttribute('data-asset-id');
+                const imageType = this.getAttribute('data-type');
+                const assetLink = document.querySelector(`[data-asset-id="${assetId}"]`);
+                
+                if (assetLink) {
+                    assetLink.style.backgroundImage = `url('/static/images/${assetId}${imageType}.png')`;
+                }
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                const assetId = this.getAttribute('data-asset-id');
+                const assetLink = document.querySelector(`[data-asset-id="${assetId}"]`);
+                
+                if (assetLink) {
+                    assetLink.style.backgroundImage = `url('/static/images/${assetId}d.png')`;
+                }
+            });
+        });
+    });
 </script>

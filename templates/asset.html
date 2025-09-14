@@ -9,11 +9,7 @@
 <div class="grid-3">
     <div class="vertical_align">
         <img class="image" src="/static/images/{{asset[0][0]}}d.png">
-    </div>
-
-    <div class="vertical_align">
-        <h2>{{asset[0][2]}}</h2>
-        <div class="vertical_align">
+        <div class="tag-grid">
             {% for tag in assettags %}
             <span class="button"><i class="{{tag[1]}}"></i> {{ tag[0] }}</span>
             {% endfor %}
@@ -21,10 +17,31 @@
     </div>
 
     <div class="vertical_align">
-        <a class="button" href="/static/images/{{asset[0][0]}}n.png" download="n.png">Normal Map <i class="fa-solid fa-download"></i></a>
-        <a class="button" href="/static/images/{{asset[0][0]}}d.png" download="d.png">Diffuse Map <i class="fa-solid fa-download"></i></a>
-        <a class="button" href="/static/images/{{asset[0][0]}}s.png" download="s.png">Specular Map <i class="fa-solid fa-download"></i></a>
-        <a class="button" href="/static/images/{{asset[0][0]}}o.png" download="o.png">Occlusion Map <i class="fa-solid fa-download"></i></a>
+        <h2>{{asset[0][5] | safe}}</h2>
+    </div>
+
+    <div class="vertical_align">
+        {% if available_downloads %}
+            {% for suffix in available_downloads %}
+                {% if suffix == 'd' %}
+                    <a class="button" href="/download/{{asset[0][0]}}/d">Diffuse Map <i class="fa-solid fa-download"></i></a>
+                {% elif suffix == 'n' %}
+                    <a class="button" href="/download/{{asset[0][0]}}/n">Normal Map <i class="fa-solid fa-download"></i></a>
+                {% elif suffix == 's' %}
+                    <a class="button" href="/download/{{asset[0][0]}}/s">Specular Map <i class="fa-solid fa-download"></i></a>
+                {% elif suffix == 'o' %}
+                    <a class="button" href="/download/{{asset[0][0]}}/o">Occlusion Map <i class="fa-solid fa-download"></i></a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>No downloadable files available.</p>
+        {% endif %}
+        <br>
+        <h1>Stats</h1>
+        <p>Views: {{asset[0][2]}}</p>
+        <p>Downloads: {{asset[0][3]}}</p>
+        <p>Likes: {{asset[0][4]}}</p>
+
     </div>
 </div>
 {% endblock %}
