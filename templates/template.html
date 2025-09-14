@@ -21,7 +21,7 @@
             <div class="navbar">
                 <div id="tag-buttons">
                     {% for tag in tags %}
-                    <button class="button" data-tag="{{ tag[0] }}"><i class="{{tag[1]}}" ></i> {{ tag[0] }}</button>
+                    <button class="tag-button" data-tag="{{ tag[0] }}"><i class="{{tag[1]}}" ></i> {{ tag[0] }}</button>
                     {% endfor %}
                 </div>
                 <input class="search" type="text" name="name" placeholder="Search...">
@@ -37,7 +37,7 @@
 </html>
 
 <script>
-    const buttons = document.querySelectorAll('#tag-buttons .button');
+    const buttons = document.querySelectorAll('#tag-buttons .tag-button');
     const assets = document.querySelectorAll('.asset');
     const activeTags = new Set();
     const searchInput = document.querySelector('.search');
@@ -86,7 +86,7 @@
             button.addEventListener('mouseenter', function() {
                 const assetId = this.getAttribute('data-asset-id');
                 const imageType = this.getAttribute('data-type');
-                const assetLink = document.querySelector(`[data-asset-id="${assetId}"]`);
+                const assetLink = document.querySelector(`a[data-asset-id="${assetId}"]`);
                 
                 if (assetLink) {
                     assetLink.style.backgroundImage = `url('/static/images/${assetId}${imageType}.png')`;
@@ -95,7 +95,7 @@
             
             button.addEventListener('mouseleave', function() {
                 const assetId = this.getAttribute('data-asset-id');
-                const assetLink = document.querySelector(`[data-asset-id="${assetId}"]`);
+                const assetLink = document.querySelector(`a[data-asset-id="${assetId}"]`);
                 
                 if (assetLink) {
                     assetLink.style.backgroundImage = `url('/static/images/${assetId}d.png')`;

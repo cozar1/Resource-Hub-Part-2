@@ -33,6 +33,7 @@ def allowed_file(filename):
         and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
     )
 
+# home page
 @app.route('/')
 def home():
     tags = query("SELECT name, icon FROM Tag")
@@ -47,27 +48,25 @@ def home():
 
     for asset in processed_assets:
         associated_tags = query(
-            "SELECT name, icon FROM Tag WHERE ID IN (SELECT Tag_ID FROM assetTags WHERE Model_ID = ?)",
+            "SELECT name, icon FROM Tag WHERE ID IN \
+            (SELECT Tag_ID FROM assetTags WHERE Model_ID = ?)",
             (asset[0],)
         )
         asset.append(associated_tags)
-
+        
+        # Check which image types are available for this asset
         available_types = []
         for suffix in ['d', 'n', 's', 'o']:
             file_path = os.path.join(app.config["UPLOAD_FOLDER"], f"{asset[0]}{suffix}.png")
             if os.path.exists(file_path):
                 available_types.append(suffix)
-
-        if len(available_types) == 1:
-            available_types = []
-
         asset.append(available_types)
 
     return render_template('home.html', tags=tags, assets=processed_assets, show_navbar=True)
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html', error=404), 404
+    return render_template('404.html', error=e), 404
 
 @app.route('/upload', methods=["GET", "POST"])
 def upload():
@@ -87,7 +86,7 @@ def upload():
     }
 
     if not files["d"] or files["d"].filename == "":
-        return render_template("404.html", error="401 No Diffuse Selected")
+        return render_template("404.html", error="401 No Image Selected")
 
     for suffix, file in files.items():
         if file and file.filename != "":
@@ -128,18 +127,7 @@ def asset(id):
     asset = query("SELECT id,name,views,downloads,likes,description FROM asset WHERE ID = ?", (id,))
     assettags = query("SELECT name,icon FROM Tag WHERE ID IN (SELECT Tag_ID FROM assetTags WHERE Model_ID = ?)", (id,))
 
-    available_downloads = []
-    for suffix in ['d', 'n', 's', 'o']:
-        file_path = os.path.join(app.config["UPLOAD_FOLDER"], f"{id}{suffix}.png")
-        if os.path.exists(file_path):
-            available_downloads.append(suffix)
-
-    if not asset[0][5]:
-        asset_list = list(asset[0])
-        asset_list[5] = "Hmm... it seems this asset has no description... so heres the Bee Movie script! " + bee_movie
-        asset = (asset_list,)
-
-    return render_template('asset.html', show_navbar=False, asset=asset, assettags=assettags, available_downloads=available_downloads)
+    return render_template('asset.html', show_navbar=False, asset=asset, assettags=assettags)
 
 
 
