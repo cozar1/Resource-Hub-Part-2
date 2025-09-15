@@ -143,6 +143,13 @@ input {
     color: var(--accent-color);
 }
 
+.img-types .button.active {
+    background-color: var(--primary-font-color);
+    color: var(--accent-color);
+    border-color: var(--primary-font-color);
+    transform: scale(1.05);
+}
+
 .grid-3 {
     text-align: center;
     display: grid;
@@ -311,4 +318,50 @@ i {
 
 .tag-grid .button {
     margin: var(--margin);
+}
+
+/* Upload page tag selection */
+.tag-selection-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: var(--margin);
+}
+
+.selectable-tag-button {
+    font-size: 20px;
+    color: var(--primary-font-color);
+    border: 4px solid var(--accent-color);
+    border-radius: var(--border-radius);
+    padding: 8px 16px;
+    margin: 5px;
+    background-color: var(--accent-color);
+    text-align: center;
+    transition-duration: 0.3s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+
+.selectable-tag-button:hover {
+    transform: scale(1.05);
+    background-color: var(--primary-font-color);
+    color: var(--accent-color);
+    border-color: var(--primary-font-color);
+}
+
+.selectable-tag-button.selected {
+    text-shadow: none;
+    color: var(--accent-color);
+    border: 4px solid var(--primary-font-color);
+    background-color: var(--primary-font-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+}
+
+.selectable-tag-button i {
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
 }

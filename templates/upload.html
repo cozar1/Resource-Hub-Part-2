@@ -1,9 +1,15 @@
 {% extends "template.html" %}
 {% block content %}
 <form action="/upload" method="post" enctype="multipart/form-data">
-    <div class="vertical_align" style="margin: 0px 750px 0px 750px; gap: 5px;">
+        <div class="vertical_align" style="margin: 0px 750px 0px 750px; gap: 5px;">
             <h1>Upload Asset</h1>
             <img id="preview-img" class="image" src="../static/images/placeholder.png">
+            <div class="img-types">
+                <div class="button img-type-btn active" data-type="d" data-preview-id="preview-img">D</div>
+                <div class="button img-type-btn" data-type="n" data-preview-id="preview-img">N</div>
+                <div class="button img-type-btn" data-type="s" data-preview-id="preview-img">S</div>
+                <div class="button img-type-btn" data-type="o" data-preview-id="preview-img">O</div>
+            </div>
             
             <div>
                 <input class="search" type="text" name="name" placeholder="Name">
@@ -35,12 +41,12 @@
             </label>
 
             <h1>Tag(s)</h1>
-            <div class="grid-3">
+            <div class="tag-selection-grid">
                 {% for tag in tags %}
-                <div>
-                    <input class="selectable_button" type="checkbox" name="tags" value="{{ tag[0] }}">
-                    <h2>{{ tag[1] }}</h2>
-                </div>
+                <label class="selectable-tag-button" data-tag-id="{{ tag[0] }}">
+                    <input type="checkbox" name="tags" value="{{ tag[0] }}" style="display: none;">
+                    <i class="{{ tag[2] }}"></i> {{ tag[1] }}
+                </label>
                 {% endfor %}
             </div>
 
@@ -62,7 +68,78 @@
             }
             reader.readAsDataURL(input.files[0]);
         }
+        
+        // Update the active image type button based on which file was selected
+        const fileType = input.name; // 'diffuse', 'normal', 'specular', 'occlusion'
+        const typeMapping = {
+            'diffuse': 'd',
+            'normal': 'n', 
+            'specular': 's',
+            'occlusion': 'o'
+        };
+        
+        if (typeMapping[fileType]) {
+            const activeButton = document.querySelector(`.img-type-btn[data-type="${typeMapping[fileType]}"]`);
+            if (activeButton) {
+                // Remove active class from all buttons
+                document.querySelectorAll('.img-type-btn').forEach(btn => btn.classList.remove('active'));
+                // Add active class to the button for the selected file type
+                activeButton.classList.add('active');
+            }
+        }
     }
+
+    // Handle tag selection and image type switching
+    document.addEventListener('DOMContentLoaded', function() {
+        const tagButtons = document.querySelectorAll('.selectable-tag-button');
+        const imgTypeButtons = document.querySelectorAll('.img-type-btn');
+        const fileInputs = {
+            'd': document.querySelector('input[name="diffuse"]'),
+            'n': document.querySelector('input[name="normal"]'),
+            's': document.querySelector('input[name="specular"]'),
+            'o': document.querySelector('input[name="occlusion"]')
+        };
+        
+        // Handle tag selection
+        tagButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+                
+                if (checkbox.checked) {
+                    this.classList.add('selected');
+                } else {
+                    this.classList.remove('selected');
+                }
+            });
+        });
+        
+        // Handle image type switching
+        imgTypeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const imageType = this.getAttribute('data-type');
+                const previewId = this.getAttribute('data-preview-id');
+                const previewImg = document.getElementById(previewId);
+                
+                // Update button states
+                imgTypeButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Check if there's a file selected for this type
+                const fileInput = fileInputs[imageType];
+                if (fileInput && fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImg.src = e.target.result;
+                    }
+                    reader.readAsDataURL(fileInput.files[0]);
+                } else {
+                    // Show placeholder if no file is selected for this type
+                    previewImg.src = '../static/images/placeholder.png';
+                }
+            });
+        });
+    });
 </script>
 {% endblock %}
 

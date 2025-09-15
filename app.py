@@ -71,7 +71,7 @@ def page_not_found(e):
 @app.route('/upload', methods=["GET", "POST"])
 def upload():
     if request.method == "GET":
-        tags = query("SELECT id, name FROM Tag")
+        tags = query("SELECT id, name, icon FROM Tag")
         return render_template('upload.html', show_navbar=False, tags=tags)
 
     name = request.form["name"]
@@ -126,8 +126,16 @@ def asset(id):
     query("UPDATE asset SET views = COALESCE(views, 0) + 1 WHERE ID = ?", (id,), commit=True)
     asset = query("SELECT id,name,views,downloads,likes,description FROM asset WHERE ID = ?", (id,))
     assettags = query("SELECT name,icon FROM Tag WHERE ID IN (SELECT Tag_ID FROM assetTags WHERE Model_ID = ?)", (id,))
+    
+    # Check which image types are available for this asset
+    available_downloads = []
+    for suffix in ['d', 'n', 's', 'o']:
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], f"{id}{suffix}.png")
+        if os.path.exists(file_path):
+            available_downloads.append(suffix)
 
-    return render_template('asset.html', show_navbar=False, asset=asset, assettags=assettags)
+
+    return render_template('asset.html', show_navbar=False, asset=asset, assettags=assettags, available_downloads=available_downloads)
 
 
 

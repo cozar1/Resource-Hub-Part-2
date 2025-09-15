@@ -8,7 +8,12 @@
 
 <div class="grid-3">
     <div class="vertical_align">
-        <img class="image" src="/static/images/{{asset[0][0]}}d.png">
+        <img id="asset-preview-img" class="image" src="/static/images/{{asset[0][0]}}d.png">
+        <div class="img-types">
+            {% for suffix in available_downloads %}
+            <div class="button img-type-btn" data-type="{{suffix}}" data-asset-id="{{asset[0][0]}}">{{suffix.upper()}}</div>
+            {% endfor %}
+        </div>
         <div class="tag-grid">
             {% for tag in assettags %}
             <span class="button"><i class="{{tag[1]}}"></i> {{ tag[0] }}</span>
@@ -44,4 +49,31 @@
 
     </div>
 </div>
+
+<script>
+    // Handle image type switching on asset page
+    document.addEventListener('DOMContentLoaded', function() {
+        const imgTypeButtons = document.querySelectorAll('.img-type-btn');
+        const previewImg = document.getElementById('asset-preview-img');
+        
+        imgTypeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const imageType = this.getAttribute('data-type');
+                const assetId = this.getAttribute('data-asset-id');
+                
+                // Update the image source
+                previewImg.src = `/static/images/${assetId}${imageType}.png`;
+                
+                // Update button states
+                imgTypeButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Set the first button as active by default
+        if (imgTypeButtons.length > 0) {
+            imgTypeButtons[0].classList.add('active');
+        }
+    });
+</script>
 {% endblock %}
