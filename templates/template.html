@@ -96,9 +96,14 @@
             button.addEventListener('mouseleave', function() {
                 const assetId = this.getAttribute('data-asset-id');
                 const assetLink = document.querySelector(`a[data-asset-id="${assetId}"]`);
+                const defaultType = assetLink ? assetLink.getAttribute('data-default-type') : null;
                 
                 if (assetLink) {
-                    assetLink.style.backgroundImage = `url('/static/images/${assetId}d.png')`;
+                    if (defaultType && defaultType !== 'placeholder') {
+                        assetLink.style.backgroundImage = `url('/static/images/${assetId}${defaultType}.png')`;
+                    } else {
+                        assetLink.style.backgroundImage = `url('/static/images/placeholder.png')`;
+                    }
                 }
             });
         });

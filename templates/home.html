@@ -2,15 +2,18 @@
 {% block content %}
     <div class="body">
         {% for asset in assets %}
-        <a href="/asset/{{asset[0]}}" class="asset-link" data-asset-id="{{asset[0]}}" style="background-image: url('/static/images/{{asset[0]}}d.png')">
+        {% set default_type = asset[7][0] if asset[7] else None %}
+        <a href="/asset/{{asset[0]}}" class="asset-link" data-asset-id="{{asset[0]}}" data-default-type="{{ default_type if default_type else 'placeholder' }}" style="background-image: url('{% if default_type %}/static/images/{{asset[0]}}{{default_type}}.png{% else %}/static/images/placeholder.png{% endif %}')">
             <div class="asset" data-tags="{{ asset[6] | map(attribute=0) | join(',') }}">
                 <div class="asset-bottom">
                     <div class="asset-info">
                         <p>{{ asset[1] }}</p>
                         <div class="img-types">
-                            {% for type in asset[7] %}
-                            <div class="button img-type-btn" data-type="{{type}}" data-asset-id="{{asset[0]}}">{{type.upper()}}</div>
-                            {% endfor %}
+                            {% if asset[7] %}
+                                {% for type in asset[7] %}
+                                <div class="button img-type-btn" data-type="{{type}}" data-asset-id="{{asset[0]}}">{{type.upper()}}</div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                         <div class="resolution">
                             <small>{{ asset[5] }}</small>

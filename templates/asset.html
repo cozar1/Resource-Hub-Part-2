@@ -8,11 +8,14 @@
 
 <div class="grid-3">
     <div class="vertical_align">
-        <img id="asset-preview-img" class="image" src="/static/images/{{asset[0][0]}}d.png">
+        {% set default_type = available_downloads[0] if available_downloads else None %}
+        <img id="asset-preview-img" class="image" src="{% if default_type %}/static/images/{{asset[0][0]}}{{default_type}}.png{% else %}/static/images/placeholder.png{% endif %}">
         <div class="img-types">
-            {% for suffix in available_downloads %}
-            <div class="button img-type-btn" data-type="{{suffix}}" data-asset-id="{{asset[0][0]}}">{{suffix.upper()}}</div>
-            {% endfor %}
+            {% if available_downloads %}
+                {% for suffix in available_downloads %}
+                <div class="button img-type-btn" data-type="{{suffix}}" data-asset-id="{{asset[0][0]}}">{{suffix.upper()}}</div>
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="tag-grid">
             {% for tag in assettags %}
@@ -70,7 +73,7 @@
             });
         });
         
-        // Set the first button as active by default
+        // Set the first button as active by default if available
         if (imgTypeButtons.length > 0) {
             imgTypeButtons[0].classList.add('active');
         }
